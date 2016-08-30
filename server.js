@@ -11,47 +11,74 @@ var url = process.env.MONGOLAB_URI || 'mongodb://test:test@ds017246.mlab.com:172
 var port = 8080;
 var Bing = require('node-bing-api')({ accKey: "sItCapBzYLi1KfaAMxJfSa3OMDyQqLuQyhS5paYRfl8=" });
 
-var m_url = [];
-var m_snippet = [];
-var m_thumbnail = [];
-var m_context = [];
+MongoClient.connect(url, function (err, db) {
+    if (err) {
+        console.log('Unable to connect to the mongoDB server. Error: ', err.message);
+        throw err;
+    } 
+    else{
+        console.log('Connection established to', url);
+        // Create a collection in the database: 
+        db.createCollection(db_collection, {
+            max: 5000,
+            size: 5242880,
+            
+        });
+        var mycollection = db.collection(db_collection);
 
-app.get('/api/imagesearch/*', function (req, res) {
-    var keywords = req.params[0];
-    var offset = req.query.offset;
+    }
     
-    console.log("The search string is: " + keywords);
-
-    
-    Bing.images(keywords, {
-        top: 1,
-        skip: offset || 0
+    app.get('/api/imagesearch/*', function (req, res) {
+        var keywords = req.params[0];
+        var offset = req.query.offset;
+        var m_date = new Date().toLocaleString();
         
-    }, function(error, results, body){
+        console.log("The search string is: " + keywords);
 
-        if(error) res.send('Error: ' + error.message);
-		
-		res.json(body.d.results.map(function (item) {
-			return {
-			    url: item.MediaUrl, 
-                snippet: item.Title, 
-                thumbnail: item.Thumbnail, 
-                context: item.SourceUrl
-			};
-		}));
+    
+        Bing.images(keywords, {
+            top: 10,
+            skip: offset || 0
+        
+        }, function(error, results, body){
+
+            if(error) res.send('Error: ' + error.message);
+		    
+		    mycollection.insert( { term: keywords, when: m_date } );
+		    
+		    res.json(body.d.results.map(function (item) {
+			    return {
+			        url: item.MediaUrl, 
+                    snippet: item.Title, 
+                    thumbnail: item.Thumbnail, 
+                    context: item.SourceUrl
+			    };
+		    }));
+        });
     });
-});
 
-app.get('/api/latest/imagesearch', function (req, res) {
-    console.log(req.params[0]);
-    res.send('Hello World!');
-});
+    app.get('/api/latest/imagesearch', function (req, res) {
+        mycollection.find({}).sort({when: -1}).limit(10).toArray(function (err, results) {
+            
+            if(err){
+                res.send('Error: ' + err.message);
+            }
+            
+            res.json(results.map(function (item) {
+                return {
+			        term: item.term, 
+                    when: item.when, 
+			    };
+		    }));
+        });
+    });
 
-app.get('/*', function (req, res) {
-    res.end();
-});
+    app.get('/*', function (req, res) {
+        res.end();
+    });
 
-app.listen(8080, function () {
-  console.log('App listening on port :' + port);
+    app.listen(8080, function () {
+    console.log('App listening on port :' + port);
+    });
 });
 
