@@ -1,0 +1,22 @@
+*{
+    font-family: 'Lora', serif;
+    color: black;
+}
+
+h1{
+    text-align: center;
+}
+
+h2{
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
+ul{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    margin-right: 15px;
+    margin-left: 15px;
+    font-size: 15px;
+    font-style: italic;
+}
