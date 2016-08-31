@@ -9,7 +9,7 @@ var MongoClient = mongodb.MongoClient;
 var db_collection = "ImageSearchAbstractionLayer";
 var url = process.env.MONGOLAB_URI || 'mongodb://test:test@ds017246.mlab.com:17246/freecodecampdb';
 var port = process.env.PORT || 8080;
-var Bing = require('node-bing-api')({ accKey: "sItCapBzYLi1KfaAMxJfSa3OMDyQqLuQyhS5paYRfl8=" });
+var Bing = require('node-bing-api')({ accKey: process.env.API_KEY });
 var path = require("path");
 
 app.use(express.static(__dirname));
@@ -25,7 +25,6 @@ MongoClient.connect(url, function (err, db) {
         db.createCollection(db_collection, {
             max: 5000,
             size: 5242880,
-            
         });
         var mycollection = db.collection(db_collection);
     }

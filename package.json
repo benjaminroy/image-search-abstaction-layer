@@ -4,13 +4,14 @@
   "description": "FCC Api project #4",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
+  "start": "nf start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Benjamin Roy",
   "license": "ISC",
   "dependencies": {
     "express": "^4.14.0",
+    "foreman": "2.0.0",
     "google-images": "^1.0.0",
     "mongodb": "^2.2.9",
     "node-bing-api": "^2.4.1"
