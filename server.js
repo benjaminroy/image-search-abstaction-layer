@@ -8,7 +8,7 @@ var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
 var db_collection = "ImageSearchAbstractionLayer";
 var url = process.env.MONGOLAB_URI || 'mongodb://test:test@ds017246.mlab.com:17246/freecodecampdb';
-var port = 8080;
+var port = process.env.PORT || 8080;
 var Bing = require('node-bing-api')({ accKey: "sItCapBzYLi1KfaAMxJfSa3OMDyQqLuQyhS5paYRfl8=" });
 var path = require("path");
 
@@ -83,7 +83,7 @@ MongoClient.connect(url, function (err, db) {
         res.end();
     });
 
-    app.listen(8080, function () {
+    app.listen(port, function () {
     console.log('App listening on port :' + port);
     });
 });
