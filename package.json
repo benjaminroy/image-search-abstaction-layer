@@ -12,6 +12,16 @@
   "dependencies": {
     "express": "^4.14.0",
     "google-images": "^1.0.0",
-    "mongodb": "^2.2.9"
-  }
+    "mongodb": "^2.2.9",
+    "node-bing-api": "^2.4.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benjaminroy/image-search-abstaction-layer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/benjaminroy/image-search-abstaction-layer/issues"
+  },
+  "homepage": "https://github.com/benjaminroy/image-search-abstaction-layer#readme"
 }
